@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  business_logic:
+    build: ./backend/business_logic
+    ports:
+      - "8000:8000"
+    depends_on:
+      - notifications
+    networks:
+      - event_network
+
+  notifications:
+    build: ./backend/notifications
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+    networks:
+      - event_network
+
+networks:
+  event_network:
+    driver: bridge
